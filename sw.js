@@ -1,4 +1,6 @@
-const CACHE_NAME = "most-goal-v1";
+// Bump this version string on every deploy so the service worker fetches
+// fresh files instead of serving a stale cached copy.
+const CACHE_NAME = "most-goal-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -23,19 +25,17 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Cache-first for app shell, network-first fallback for anything else
+// Network-first: always try to fetch the latest version when online (so a
+// new Vercel deploy shows up immediately), fall back to cache when offline.
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(event.request)
-        .then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
-          return response;
-        })
-        .catch(() => cached);
-    })
+    fetch(event.request)
+      .then((response) => {
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });

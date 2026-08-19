@@ -111,10 +111,10 @@ function escapeHtml(str){
 
 function goalRowsHtml(g){
   return `
-    <div class="goal-row"><span class="goal-row-label">Durée</span><span class="goal-row-value">${g.days} jours, renouvelables</span></div>
-    <div class="goal-row"><span class="goal-row-label">Action (Small)</span><span class="goal-row-value">${escapeHtml(g.s)}</span></div>
-    <div class="goal-row"><span class="goal-row-label">Objectif</span><span class="goal-row-value">${escapeHtml(g.o)}</span></div>
     <div class="goal-row"><span class="goal-row-label">Motivation</span><span class="goal-row-value">${escapeHtml(g.m)}</span></div>
+    <div class="goal-row"><span class="goal-row-label">Objectif</span><span class="goal-row-value">${escapeHtml(g.o)}</span></div>
+    <div class="goal-row"><span class="goal-row-label">Action (Small)</span><span class="goal-row-value">${escapeHtml(g.s)}</span></div>
+    <div class="goal-row"><span class="goal-row-label">Durée</span><span class="goal-row-value">${g.days} jours, renouvelables</span></div>
   `;
 }
 
