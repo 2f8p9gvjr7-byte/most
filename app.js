@@ -38,6 +38,7 @@ const inputs = {
   S: document.getElementById('inpS'),
   T: document.getElementById('inpT'),
 };
+const warnS = document.getElementById('warnS');
 const letters = {
   M: document.getElementById('letM'),
   O: document.getElementById('letO'),
@@ -69,7 +70,19 @@ function showToast(msg){
 function todayStr(){ return new Date().toISOString().slice(0,10); }
 
 /* ---------------- Wizard / gauge ---------------- */
+const UNIT_WORDS = /(minutes?|min\b|secondes?|sec\b|heures?|\bh\b|jours?|\bj\b|semaines?|mois|fois|pages?|verres?|pas\b|respirations?|km|kilom[eè]tres?|\%)/i;
+function hasNakedNumber(text){
+  const matches = text.match(/\d+/g);
+  if(!matches) return false;
+  // if there's at least one number, check that a unit word appears somewhere nearby in the text
+  return !UNIT_WORDS.test(text);
+}
+
 function updateGauge(){
+  const sVal = inputs.S.value.trim();
+  const sIsAmbiguous = sVal.length > 2 && hasNakedNumber(sVal);
+  warnS.style.display = sIsAmbiguous ? 'block' : 'none';
+
   const filled = ['M','O','S'].filter(k => inputs[k].value.trim().length > 2).length
                + (Number(inputs.T.value) > 0 ? 1 : 0);
   const pct = (filled/4)*100;
@@ -86,7 +99,7 @@ function updateGauge(){
     letters[k].classList.toggle('done', inputs[k].value.trim().length > 2);
   });
   letters.T.classList.toggle('done', Number(inputs.T.value) > 0);
-  els.generateBtn.disabled = filled < 4;
+  els.generateBtn.disabled = filled < 4 || sIsAmbiguous;
 }
 Object.values(inputs).forEach(inp => inp.addEventListener('input', updateGauge));
 

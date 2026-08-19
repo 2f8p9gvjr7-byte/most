@@ -132,6 +132,10 @@ h2{font-family:var(--font); font-weight:700; font-size:18px; margin:0;}
 }
 .step-title small{display:block; font-weight:400; color:var(--text-faint); font-size:11px; margin-top:2px; font-family:var(--mono); letter-spacing:0.02em; text-transform:none;}
 .prompt{color:var(--text-muted); font-size:13.5px; line-height:1.5; margin:0 0 12px;}
+.field-warning{
+  color:var(--orange); font-size:12px; line-height:1.5;
+  margin:8px 2px 0; font-family:var(--font); font-weight:600;
+}
 
 textarea, input[type=text], input[type=number]{
   width:100%;
