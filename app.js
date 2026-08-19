@@ -31,6 +31,8 @@ const els = {
   breatheToggle: document.getElementById('breatheToggle'),
   installBanner: document.getElementById('installBanner'),
   installBtn: document.getElementById('installBtn'),
+  updateBanner: document.getElementById('updateBanner'),
+  updateBtn: document.getElementById('updateBtn'),
 };
 const inputs = {
   M: document.getElementById('inpM'),
@@ -46,9 +48,12 @@ const letters = {
   T: document.getElementById('letT'),
 };
 
-// data shape: { goal: {m,o,s,days,text,createdAt}, checks: { "YYYY-MM-DD": {done:true, stress:5} } }
-let data = loadData();
-
+// data shape: { goal: {m,o,s,days,createdAt}, checks: { "YYYY-MM-DD": {done:true, stress:5} } }
+// localStorage.setItem is synchronous: the write is committed before the next
+// line of code runs, so it can't be interrupted by the app closing right
+// after a tap. That's why we use it directly (same approach as Patrimoine),
+// rather than IndexedDB which writes asynchronously and could lose the very
+// last change if the app is closed within the same instant.
 function loadData(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -56,6 +61,7 @@ function loadData(){
   }catch(e){ console.error('localStorage read error', e); }
   return { goal: null, checks: {} };
 }
+let data = loadData();
 function saveData(){
   try{
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -341,17 +347,46 @@ window.addEventListener('appinstalled', () => {
   els.installBanner.style.display = 'none';
 });
 
-/* ---------------- Service worker ---------------- */
+/* ---------------- Service worker + mise à jour contrôlée ---------------- */
 if('serviceWorker' in navigator){
+  let refreshing = false;
+  let waitingWorker = null;
+
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if(refreshing) return;
+    refreshing = true;
+    window.location.reload();
+  });
+
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(err => console.error('SW registration failed', err));
+    navigator.serviceWorker.register('sw.js').then((reg) => {
+      if(reg.waiting){ waitingWorker = reg.waiting; els.updateBanner.style.display = 'flex'; }
+
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        if(!newWorker) return;
+        newWorker.addEventListener('statechange', () => {
+          if(newWorker.state === 'installed' && navigator.serviceWorker.controller){
+            waitingWorker = newWorker;
+            els.updateBanner.style.display = 'flex';
+          }
+        });
+      });
+
+      document.addEventListener('visibilitychange', () => {
+        if(document.visibilityState === 'visible') reg.update().catch(() => {});
+      });
+    }).catch((err) => console.error('SW registration failed', err));
+  });
+
+  els.updateBtn.addEventListener('click', () => {
+    if(waitingWorker) waitingWorker.postMessage('SKIP_WAITING');
+    els.updateBanner.style.display = 'none';
   });
 }
 
 /* ---------------- Init ---------------- */
-(function init(){
-  updateGauge();
-  if(data.goal){
-    renderTracker();
-  }
-})();
+updateGauge();
+if(data.goal){
+  renderTracker();
+}
