@@ -221,6 +221,17 @@ textarea{min-height:56px; line-height:1.4;}
 .result-row span:first-child{color:var(--text-muted);}
 .result-row span:last-child{font-family:var(--font); font-weight:800; color:var(--orange); font-size:14.5px;}
 
+.goal-rows{margin-top:12px;}
+.goal-row{padding:12px 2px; border-bottom:1px solid var(--border);}
+.goal-row:last-child{border-bottom:none;}
+.goal-row .goal-row-label{
+  display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em;
+  text-transform:uppercase; color:var(--orange); margin-bottom:4px;
+}
+.goal-row .goal-row-value{
+  display:block; font-size:15px; line-height:1.45; color:var(--text); font-weight:500;
+}
+
 .note-box{
   border:1.5px dashed var(--orange-border);
   border-radius:12px;

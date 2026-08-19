@@ -6,7 +6,7 @@ const els = {
   wizard: document.getElementById('wizard'),
   result: document.getElementById('result'),
   tracker: document.getElementById('tracker'),
-  goalSentence: document.getElementById('goalSentence'),
+  goalRows: document.getElementById('goalRows'),
   goalRecap: document.getElementById('goalRecap'),
   statusBanner: document.getElementById('statusBanner'),
   generateBtn: document.getElementById('generateBtn'),
@@ -103,19 +103,31 @@ function updateGauge(){
 }
 Object.values(inputs).forEach(inp => inp.addEventListener('input', updateGauge));
 
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function goalRowsHtml(g){
+  return `
+    <div class="goal-row"><span class="goal-row-label">Durée</span><span class="goal-row-value">${g.days} jours, renouvelables</span></div>
+    <div class="goal-row"><span class="goal-row-label">Action (Small)</span><span class="goal-row-value">${escapeHtml(g.s)}</span></div>
+    <div class="goal-row"><span class="goal-row-label">Objectif</span><span class="goal-row-value">${escapeHtml(g.o)}</span></div>
+    <div class="goal-row"><span class="goal-row-label">Motivation</span><span class="goal-row-value">${escapeHtml(g.m)}</span></div>
+  `;
+}
+
 els.generateBtn.addEventListener('click', () => {
   const m = inputs.M.value.trim();
   const o = inputs.O.value.trim();
   const s = inputs.S.value.trim();
   const t = Number(inputs.T.value) || 30;
 
-  let action = s.charAt(0).toLowerCase() + s.slice(1);
-  if(!/^(je |j')/i.test(action)) action = "je " + action;
+  const pending = { m, o, s, days: t };
+  els.goalRows.innerHTML = goalRowsHtml(pending);
 
-  const sentence = `Pendant <span class="fill">${t} jours</span>, ${action} pour <span class="fill">${o.charAt(0).toLowerCase()+o.slice(1)}</span> — parce que ${m.charAt(0).toLowerCase()+m.slice(1)}`;
-  els.goalSentence.innerHTML = sentence;
-
-  data.pendingGoal = { m, o, s, days: t, text: sentence };
+  data.pendingGoal = pending;
   els.wizard.style.display = 'none';
   els.result.style.display = 'block';
   window.scrollTo({top:0, behavior:'smooth'});
@@ -180,7 +192,7 @@ function renderTracker(){
   els.breatheCard.style.display = 'block';
 
   const g = data.goal;
-  els.goalRecap.innerHTML = `<b>Objectif :</b> ${g.text} <br><span style="color:var(--ink-faint)">Débuté le ${g.createdAt}</span>`;
+  els.goalRecap.innerHTML = `<div class="result-rows" style="border-top:none; margin-bottom:0;">${goalRowsHtml(g)}</div><div style="margin-top:8px; color:var(--text-faint); font-size:11.5px;">Débuté le ${g.createdAt}</div>`;
 
   const streak = computeStreak(data.checks);
   els.streakNum.textContent = streak;
