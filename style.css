@@ -261,11 +261,12 @@ input[type=range]::-moz-range-thumb{
   width:120px; height:120px; border-radius:50%;
   background:radial-gradient(circle at 40% 35%, var(--green-bg), transparent 70%);
   border:1.5px solid var(--green);
-  display:flex; align-items:center; justify-content:center;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
   font-family:var(--mono); font-size:13px; color:var(--green);
   transition:transform 4s ease-in-out;
   transform:scale(1);
 }
+.breathe-countdown{font-size:11px; color:var(--text-faint); margin-top:4px;}
 .breathe-circle.inhale{transform:scale(1.35); transition:transform 4s ease-in-out;}
 .breathe-circle.exhale{transform:scale(1); transition:transform 6s ease-in-out;}
 .breathe-note{font-size:12px; color:var(--text-faint); margin-top:4px;}

@@ -121,10 +121,13 @@
     <h2>Pause respiration</h2>
     <p class="prompt">Cohérence cardiaque express — active le nerf vague, calme l'amygdale en 1 minute.</p>
     <div class="breathe-circle-wrap">
-      <div class="breathe-circle" id="breatheCircle">inspire</div>
+      <div class="breathe-circle" id="breatheCircle">
+        <span id="breatheWord">inspire</span>
+        <span id="breatheCountdown" class="breathe-countdown">60 s</span>
+      </div>
     </div>
     <p class="breathe-note" id="breatheNote">4 s inspiration · 6 s expiration</p>
-    <button class="action-btn ghost-btn" id="breatheToggle">Démarrer</button>
+    <button class="action-btn ghost-btn" id="breatheToggle">Démarrer (1 min)</button>
   </div>
 
   <div class="note-box">

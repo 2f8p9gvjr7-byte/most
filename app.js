@@ -25,6 +25,8 @@ const els = {
   miniChartLabels: document.getElementById('miniChartLabels'),
   breatheCard: document.getElementById('breatheCard'),
   breatheCircle: document.getElementById('breatheCircle'),
+  breatheWord: document.getElementById('breatheWord'),
+  breatheCountdown: document.getElementById('breatheCountdown'),
   breatheNote: document.getElementById('breatheNote'),
   breatheToggle: document.getElementById('breatheToggle'),
   installBanner: document.getElementById('installBanner'),
@@ -238,34 +240,61 @@ els.resetAllBtn.addEventListener('click', () => {
   showToast('Réinitialisé');
 });
 
-/* ---------------- Breathing widget (cohérence cardiaque) ---------------- */
-let breatheTimer = null;
+/* ---------------- Breathing widget (cohérence cardiaque, 1 min) ---------------- */
+const BREATHE_DURATION = 60; // seconds
+let breatheCycleTimer = null;
+let breatheCountdownTimer = null;
 let breathing = false;
+let secondsLeft = BREATHE_DURATION;
+
 function breatheCycle(){
   els.breatheCircle.classList.remove('exhale');
   els.breatheCircle.classList.add('inhale');
-  els.breatheCircle.textContent = 'inspire';
+  els.breatheWord.textContent = 'inspire';
   els.breatheNote.textContent = '4 s inspiration';
   setTimeout(() => {
     if(!breathing) return;
     els.breatheCircle.classList.remove('inhale');
     els.breatheCircle.classList.add('exhale');
-    els.breatheCircle.textContent = 'expire';
+    els.breatheWord.textContent = 'expire';
     els.breatheNote.textContent = '6 s expiration';
   }, 4000);
 }
+
+function stopBreathing(completed){
+  breathing = false;
+  clearInterval(breatheCycleTimer);
+  clearInterval(breatheCountdownTimer);
+  els.breatheToggle.textContent = 'Démarrer (1 min)';
+  els.breatheCircle.classList.remove('inhale','exhale');
+  els.breatheWord.textContent = 'inspire';
+  els.breatheNote.textContent = '4 s inspiration · 6 s expiration';
+  secondsLeft = BREATHE_DURATION;
+  els.breatheCountdown.textContent = `${BREATHE_DURATION} s`;
+  if(completed) showToast('Pause terminée — bravo 🌿');
+}
+
+function startBreathing(){
+  breathing = true;
+  secondsLeft = BREATHE_DURATION;
+  els.breatheToggle.textContent = 'Arrêter';
+  els.breatheCountdown.textContent = `${secondsLeft} s`;
+  breatheCycle();
+  breatheCycleTimer = setInterval(breatheCycle, 10000);
+  breatheCountdownTimer = setInterval(() => {
+    secondsLeft -= 1;
+    els.breatheCountdown.textContent = `${Math.max(secondsLeft,0)} s`;
+    if(secondsLeft <= 0){
+      stopBreathing(true);
+    }
+  }, 1000);
+}
+
 els.breatheToggle.addEventListener('click', () => {
-  breathing = !breathing;
   if(breathing){
-    els.breatheToggle.textContent = 'Arrêter';
-    breatheCycle();
-    breatheTimer = setInterval(breatheCycle, 10000);
+    stopBreathing(false);
   } else {
-    els.breatheToggle.textContent = 'Démarrer';
-    clearInterval(breatheTimer);
-    els.breatheCircle.classList.remove('inhale','exhale');
-    els.breatheCircle.textContent = 'inspire';
-    els.breatheNote.textContent = '4 s inspiration · 6 s expiration';
+    startBreathing();
   }
 });
 
