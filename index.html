@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MOST Goal — Stress pro</title>
+<meta name="description" content="Construis un objectif MOST pour réduire le stress professionnel et suis-le au quotidien.">
+<meta name="theme-color" content="#141d33">
+
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZTc0YzNjIi8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzJlY2M3MSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iMTA4IiBmaWxsPSIjMTQxZDMzIi8+CjxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMTgwIiBmaWxsPSJ1cmwoI2cpIiBzdHJva2U9IiNGNUE2MjMiIHN0cm9rZS1vcGFjaXR5PSIwLjU1IiBzdHJva2Utd2lkdGg9IjYiLz4KPGNpcmNsZSBjeD0iMTgwIiBjeT0iMjU2IiByPSIzOCIgZmlsbD0iIzE0MWQzMyIvPgo8Y2lyY2xlIGN4PSIxODAiIGN5PSIyNTYiIHI9IjIwIiBmaWxsPSIjZThlYWYwIi8+Cjwvc3ZnPg==">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MOST Goal">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Syne:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="install-banner" id="installBanner">
+    <span>Installe l'app sur ton téléphone pour l'utiliser hors-ligne.</span>
+    <button id="installBtn">Installer</button>
+  </div>
+
+  <div class="hero">
+    <div class="logo-row">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZTc0YzNjIi8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzJlY2M3MSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iMTA4IiBmaWxsPSIjMTQxZDMzIi8+CjxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMTgwIiBmaWxsPSJ1cmwoI2cpIiBzdHJva2U9IiNGNUE2MjMiIHN0cm9rZS1vcGFjaXR5PSIwLjU1IiBzdHJva2Utd2lkdGg9IjYiLz4KPGNpcmNsZSBjeD0iMTgwIiBjeT0iMjU2IiByPSIzOCIgZmlsbD0iIzE0MWQzMyIvPgo8Y2lyY2xlIGN4PSIxODAiIGN5PSIyNTYiIHI9IjIwIiBmaWxsPSIjZThlYWYwIi8+Cjwvc3ZnPg==" alt="Logo MOST Goal">
+      <span>Amygdale → Cortex préfrontal</span>
+    </div>
+    <h1>Construis ton MOST goal</h1>
+    <p class="sub">Un objectif minuscule, motivant et daté — pour sortir du mode survie et réactiver ta capacité à planifier. Réponds aux 4 questions ci-dessous.</p>
+    <div class="gauge">
+      <div class="gauge-fill" id="gaugeFill"></div>
+      <div class="gauge-dot" id="gaugeDot"></div>
+    </div>
+    <div class="gauge-labels"><span>Stress / survie</span><span>Clarté / stratégie</span></div>
+  </div>
+
+  <div id="wizard">
+    <div class="card">
+      <div class="step-head">
+        <div class="letter" id="letM">M</div>
+        <div class="step-title">Motivant<small>pourquoi c'est important, maintenant</small></div>
+      </div>
+      <p class="prompt">Pourquoi cet objectif compte pour toi en ce moment ? Qu'est-ce que ça change dans ton quotidien ?</p>
+      <textarea id="inpM" placeholder="Ex. Retrouver de l'énergie et arrêter de ruminer le soir."></textarea>
+    </div>
+
+    <div class="card">
+      <div class="step-head">
+        <div class="letter" id="letO">O</div>
+        <div class="step-title">Objectif<small>clair et mesurable</small></div>
+      </div>
+      <p class="prompt">Qu'est-ce que tu veux exactement ? Comment sauras-tu que c'est fait ?</p>
+      <textarea id="inpO" placeholder="Ex. Réduire ma charge mentale au travail."></textarea>
+    </div>
+
+    <div class="card">
+      <div class="step-head">
+        <div class="letter" id="letS">S</div>
+        <div class="step-title">Small<small>ridiculement petit</small></div>
+      </div>
+      <p class="prompt">Quel est le plus petit pas possible — faisable même un jour difficile ?</p>
+      <textarea id="inpS" placeholder="Ex. Une pause de 2 minutes de respiration à 10h, 13h et 16h."></textarea>
+    </div>
+
+    <div class="card">
+      <div class="step-head">
+        <div class="letter" id="letT">T</div>
+        <div class="step-title">Timely<small>≤ 90 jours</small></div>
+      </div>
+      <p class="prompt">Sur combien de jours t'engages-tu (30 à 90) ?</p>
+      <div class="row">
+        <input type="number" id="inpT" min="1" max="90" value="30">
+        <label>jours, renouvelables</label>
+      </div>
+    </div>
+
+    <button class="save-btn" id="generateBtn" disabled>Générer mon MOST goal</button>
+  </div>
+
+  <div id="result" class="card fade-in">
+    <p class="prompt" style="margin-bottom:0;">Ton MOST goal</p>
+    <p class="goal-sentence" id="goalSentence"></p>
+    <button class="save-btn" id="saveBtn">Enregistrer et commencer le suivi</button>
+    <button class="save-btn ghost-btn" id="editBtn">Modifier</button>
+  </div>
+
+  <div id="tracker" class="card fade-in">
+    <p class="prompt" style="margin-bottom:10px;">Suivi quotidien</p>
+    <div class="status-banner" id="statusBanner" style="display:none;">✅ Fait aujourd'hui</div>
+    <div class="goal-recap" id="goalRecap"></div>
+
+    <div class="streak-row">
+      <span class="streak-num" id="streakNum">0</span>
+      <span class="streak-word" id="streakWord">jour de suite</span>
+    </div>
+    <div class="dots" id="dots"></div>
+
+    <div class="stress-block">
+      <div class="stress-block-head">
+        <span>Niveau de stress ressenti aujourd'hui</span>
+        <span class="stress-val" id="stressVal">5</span>
+      </div>
+      <input type="range" id="stressSlider" min="0" max="10" value="5">
+    </div>
+
+    <div class="mini-chart" id="miniChart"></div>
+    <div class="mini-chart-labels" id="miniChartLabels"></div>
+
+    <div class="today-check" style="margin-top:16px;">
+      <button class="action-btn" id="checkBtn" style="flex:1;">Fait aujourd'hui ✓</button>
+      <button class="action-btn ghost-btn" id="newGoalBtn" style="flex:1;">Nouvel objectif</button>
+    </div>
+  </div>
+
+  <div class="card breathe-card" id="breatheCard" style="display:none;">
+    <h2>Pause respiration</h2>
+    <p class="prompt">Cohérence cardiaque express — active le nerf vague, calme l'amygdale en 1 minute.</p>
+    <div class="breathe-circle-wrap">
+      <div class="breathe-circle" id="breatheCircle">inspire</div>
+    </div>
+    <p class="breathe-note" id="breatheNote">4 s inspiration · 6 s expiration</p>
+    <button class="action-btn ghost-btn" id="breatheToggle">Démarrer</button>
+  </div>
+
+  <div class="note-box">
+    <b>Confidentialité</b>
+    Tes données (objectif, coches quotidiennes, niveau de stress) restent uniquement sur cet appareil, dans le stockage local du navigateur. Rien n'est envoyé sur un serveur.
+  </div>
+
+  <footer>
+    <button id="resetAllBtn">Tout réinitialiser</button>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
